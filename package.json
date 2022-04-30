@@ -1,6 +1,6 @@
 {
-  "name": "vue3-component-library",
-  "version": "0.0.6",
+  "name": "guebbit-vue-library",
+  "version": "0.0.1",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "unpkg": "dist/vuelib.min.js",
@@ -9,10 +9,6 @@
     "dist",
     "src",
     "types/*.d.ts"
-  ],
-  "sideEffects": [
-    "*.css",
-    "*.scss"
   ],
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -71,20 +67,6 @@
     "husky": "^7.0.4",
     "@commitlint/cli": "^16.2.4",
     "@commitlint/config-conventional": "^16.2.4"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/vue3-essential",
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "parser": "babel-eslint"
-    },
-    "rules": {}
   },
   "browserslist": [
     "> 1%",

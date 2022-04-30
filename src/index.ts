@@ -1,11 +1,7 @@
-// blocks
-import Panel from "@/components/blocks/Panel.vue";
-// cards
-import BookCard from "@/components/cards/BookCard.vue";
-import CreditCard from "@/components/cards/CreditCard.vue";
+import components from "@/components";
+import interfaces from "@/interfaces";
 
 export default {
-  Panel,
-  BookCard,
-  CreditCard,
-};
+    ...interfaces,
+    ...components
+}

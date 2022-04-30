@@ -1,7 +1,7 @@
-import components from "@/components";
-import interfaces from "@/interfaces";
+import components from "./components";
+import interfaces from "./interfaces";
 
 export default {
-    ...interfaces,
-    ...components
-}
+  ...interfaces,
+  ...components,
+};

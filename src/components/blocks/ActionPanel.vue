@@ -3,8 +3,8 @@
     <template v-slot:backgroundShadow>
       <slot name="backgroundShadow"></slot>
     </template>
-    <template v-slot:backgroundImage>
-      <slot name="backgroundImage"></slot>
+    <template v-slot:background>
+      <slot name="background"></slot>
     </template>
     <template v-slot:default>
       <slot>

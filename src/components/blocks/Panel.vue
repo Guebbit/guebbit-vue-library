@@ -22,12 +22,14 @@
     <slot name="backgroundShadow">
       <div class="panel-shadow"></div>
     </slot>
-    <slot name="backgroundImage">
+    <slot name="background">
       <!-- TODO thumbnail & lazyload -->
       <img
         v-if="backgroundImage"
         class="panel-background"
         :src="backgroundImage"
+        :alt="backgroundAlt"
+        :title="backgroundTitle"
       />
     </slot>
     <div class="panel-content">
@@ -73,6 +75,18 @@ export default defineComponent({
       type: Boolean,
       default: () => {
         return false;
+      },
+    },
+    backgroundTitle: {
+      type: String,
+      default: () => {
+        return "";
+      },
+    },
+    backgroundAlt: {
+      type: String,
+      default: () => {
+        return "";
       },
     },
 
@@ -194,6 +208,7 @@ $hero-panel-mobile-threshold: 600px !default;
     z-index: 1;
     width: 100%;
     & > * {
+      width: 100%;
       margin: 0 auto;
     }
   }

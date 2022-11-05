@@ -4,6 +4,7 @@
     :class="{
       'shadow-active': shadow && shadow.length > 0,
       'aspect-ratio-mode': ratio,
+      'content-full-height': full,
       'centered-mode': centered,
       'centered-top-mode': centeredTop,
       'centered-bottom-mode': centeredBottom,
@@ -137,6 +138,14 @@ export default defineComponent({
         return false;
       },
     },
+    // full height of content
+    full: {
+      type: Boolean,
+      default: () => {
+        return false;
+      },
+    },
+
 
     // BACKGROUND dimensions
     ratio: {
@@ -280,6 +289,41 @@ $hero-panel-mobile-threshold: 600px !default;
     align-items: flex-end;
     .panel-content {
       align-items: flex-end;
+    }
+  }
+
+  &.content-full-height{
+    .panel-content {
+      height: 100%;
+      & > * {
+        height: 100%;
+      }
+    }
+
+    &.centered-mode,
+    &.centered-top-mode,
+    &.centered-bottom-mode {
+      .panel-content {
+        & > * {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    }
+    &.centered-top-mode {
+      .panel-content {
+        & > * {
+          align-items: flex-start;
+        }
+      }
+    }
+    &.centered-bottom-mode {
+      .panel-content {
+        & > * {
+          align-items: flex-end;
+        }
+      }
     }
   }
 

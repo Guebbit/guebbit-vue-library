@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="35fabcdb-285d-433e-8dad-99472da88ddc" name="Changes" comment="Panel fix">
+      <change beforePath="$PROJECT_DIR$/.browserslistrc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.eslintrc.js" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintrc.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/rollup.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/serve.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/serve.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/blocks/ActionPanel.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/blocks/Panel.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/cards/BookCard.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/cards/CreditCard.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entry.esm.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entry.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/interfaces/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="28WRiQV5Ev3cdYSwPhNdh61AVlI" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "WebServerToolWindowFactoryState": "false",
+    "nodejs_package_manager_path": "yarn",
+    "ts.external.directory.path": "C:\\Users\\guerz\\Lavoro\\Guebbit\\guebbit-vue-library\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\guerz\Lavoro\Guebbit\guebbit-vue-library\src\components\blocks" />
+      <recent name="C:\Users\guerz\Lavoro\Guebbit\guebbit-vue-library" />
+      <recent name="C:\Users\guerz\Lavoro\Guebbit\guebbit-vue-library\src" />
+      <recent name="C:\Users\guerz\Lavoro\Guebbit\guebbit-vue-library\src\components" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\guerz\Lavoro\Guebbit\guebbit-vue-library\src" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="35fabcdb-285d-433e-8dad-99472da88ddc" name="Changes" comment="" />
+      <created>1651330481858</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1651330481858</updated>
+      <workItem from="1651330483023" duration="2309000" />
+      <workItem from="1651332823114" duration="26000" />
+      <workItem from="1651332892526" duration="308000" />
+      <workItem from="1657140142733" duration="163000" />
+      <workItem from="1657660678513" duration="522000" />
+      <workItem from="1657706905139" duration="1658000" />
+      <workItem from="1658222681435" duration="1189000" />
+      <workItem from="1667675744851" duration="7334000" />
+      <workItem from="1667686356620" duration="4294000" />
+    </task>
+    <task id="LOCAL-00001" summary="Panel fix">
+      <created>1657140273179</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1657140273179</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Panel fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="Panel fix" />
+  </component>
+</project>

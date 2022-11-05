@@ -24,6 +24,7 @@
 import { defineComponent } from "vue";
 // WARNING: dependence required
 import Panel from "./Panel.vue";
+// import Panel from "@/components/blocks/Panel.vue";
 
 export default defineComponent({
   name: "ActionPanel",

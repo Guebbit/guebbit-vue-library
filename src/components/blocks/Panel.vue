@@ -4,20 +4,11 @@
     :class="{
       'shadow-active': shadow && shadow.length > 0,
       'aspect-ratio-mode': ratio,
+      'content-full-height': full,
       'centered-mode': centered,
-      'centered-top-mode': centeredTop,
-      'centered-bottom-mode': centeredBottom,
+      'bottom-mode': bottom,
     }"
-    :style="{
-      height: !strict ? null : height ? height : hero ? '100vh' : null,
-      'min-height': strict ? null : height ? height : hero ? '100vh' : null,
-      'background-image': 'url(\'' + backgroundImageCss + '\')',
-      'background-attachment': fixed ? 'fixed' : null,
-      '--hero-panel-background-color': background,
-      '--hero-panel-shadow-color': shadow,
-      '--hero-panel-shadow-opacity': shadowOpacity,
-      '--hero-panel-aspect-ratio': trueRatio * 100 + '%',
-    }"
+    :style="styleHelper"
   >
     <slot name="backgroundShadow">
       <div class="panel-shadow"></div>
@@ -25,12 +16,42 @@
     <slot name="background">
       <!-- TODO thumbnail & lazyload -->
       <img
-        v-if="backgroundImage"
+        v-if="backgroundType === 'image'"
         class="panel-background"
-        :src="backgroundImage"
+        :src="background"
         :alt="backgroundAlt"
         :title="backgroundTitle"
       />
+      <div
+        v-else-if="backgroundType === 'color'"
+        class="panel-background"
+        :style="{
+          'background-color': background,
+        }"
+      />
+      <div v-if="backgroundType === 'iframe'" class="panel-background">
+        <div>
+          <iframe
+            :src="background"
+            frameborder="0"
+            allowfullscreen=""
+            autoplay=""
+            mute=""
+            loop=""
+          />
+        </div>
+      </div>
+      <video
+        v-else
+        class="panel-background"
+        preload="metadata"
+        playsinline=""
+        muted=""
+        loop=""
+        autoplay=""
+      >
+        <source :src="background" :type="backgroundType" />
+      </video>
     </slot>
     <div class="panel-content">
       <div>
@@ -40,152 +61,234 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { defineProps, computed, type PropType } from "vue";
 
-export default defineComponent({
-  name: "Panel",
+const props = defineProps({
+  /**
+   * Height of panel
+   * Min-height default. Become "height" when strict = true
+   */
+  height: {
+    type: String,
+    required: false,
+  },
 
-  props: {
-    height: {
-      type: String,
-      required: false,
-    },
+  /**
+   * Background of panel
+   */
+  background: {
+    type: String,
+    required: false,
+  },
 
-    background: {
-      type: String,
-      required: false,
+  /**
+   * Background type
+   * Background can be an image, a video, an iframe or a color
+   * In case of VIDEO, the type is the codec (es: mp4)
+   * In case of CSS, it an image that will be used on background-image
+   */
+  backgroundType: {
+    type: String as PropType<"image" | "iframe" | "color" | "css" | string>,
+    default: () => "image",
+    /*
+    validator(type :string) {
+      return ["image", "video", "url", "color"].includes(type)
     },
-    // TODO thumbnail ONLY for backgroundImage and <img />
-    thumbnailImage: {
-      type: String,
-      required: false,
-    },
-    backgroundImage: {
-      type: String,
-      required: false,
-    },
-    // Background via background-image
-    backgroundImageCss: {
-      type: String,
-      required: false,
-    },
-    // background image fixed effect
-    fixed: {
-      type: Boolean,
-      default: () => {
-        return false;
-      },
-    },
-    backgroundTitle: {
-      type: String,
-      default: () => {
-        return "";
-      },
-    },
-    backgroundAlt: {
-      type: String,
-      default: () => {
-        return "";
-      },
-    },
+    */
+  },
 
-    // MODES
-    // shadow (better readability)
-    shadow: {
-      type: String,
-      default: () => {
-        return "#000";
-      },
-    },
-    shadowOpacity: {
+  /**
+   * The thumbnail is used on image for lazyload (TODO)
+   * or in the video as poster
+   */
+  backgroundThumbnail: {
+    type: String,
+    required: false,
+  },
+
+  /**
+   * To apply an effect on the image
+   * fixed: TODO (css only for now)
+   * parallax: TODO
+   */
+  backgroundEffect: {
+    type: String as PropType<"regular" | "fixed" | "parallax">,
+    default: () => "regular",
+    validator: (type: string) =>
+      ["regular", "fixed", "parallax"].includes(type),
+  },
+
+  /**
+   * Background title TAG
+   * TODO with CSS use ARIA
+   */
+  backgroundTitle: {
+    type: String,
+    default: () => "",
+  },
+
+  /**
+   * Background title ALT
+   * TODO with CSS use ARIA
+   */
+  backgroundAlt: {
+    type: String,
+    default: () => "",
+  },
+
+  /**
+   * Shadow to apply between content and background,
+   * to enhance readability
+   */
+  shadow: {
+    type: String,
+    required: false,
+  },
+
+  /**
+   * shadow opacity
+   */
+  shadowOpacity: {
+    type: Number,
+    default: () => 0.4,
+  },
+
+  /**
+   * Background ratio (if needed)
+   * ex: 16:9, 16/9, 16-9 or 16.9
+   */
+  ratio: {
+    type: String,
+    required: false,
+  },
+
+  /**
+   * Content is centered
+   * (default: top left)
+   */
+  centered: {
+    type: Boolean,
+    default: () => false,
+  },
+
+  /**
+   * Content is at the bottom
+   * (default: top)
+   */
+  bottom: {
+    type: Boolean,
+    default: () => false,
+  },
+
+  /**
+   * Works with {height}
+   * true = height
+   * false = min-height
+   */
+  strict: {
+    type: Boolean,
+    default: () => false,
+  },
+
+  /**
+   * SHORTCUT: height at 100vh
+   * (use {strict} separately)
+   */
+  hero: {
+    type: Boolean,
+    default: () => false,
+  },
+
+  /**
+   * full height of content TODO???
+   */
+  full: {
+    type: Boolean,
+    default: () => false,
+  },
+
+  /*
+  backgroundHeight: {
       type: Number,
-      default: () => {
-        return 0.4;
-      },
-    },
-    // centered modes
-    centered: {
-      type: Boolean,
-      default: () => {
-        return false;
-      },
-    },
-    centeredTop: {
-      type: Boolean,
-      default: () => {
-        return false;
-      },
-    },
-    centeredBottom: {
-      type: Boolean,
-      default: () => {
-        return false;
-      },
-    },
-    // height strict true = height, false = min-height
-    strict: {
-      type: Boolean,
-      default: () => {
-        return false;
-      },
-    },
-    // if height is not set, it's 100vh
-    hero: {
-      type: Boolean,
-      default: () => {
-        return false;
-      },
-    },
-
-    // BACKGROUND dimensions
-    ratio: {
-      type: String,
-      required: false,
-    },
-    /*
-    backgroundHeight: {
-        type: Number,
-        required: false
-    },
-    backgroundWidth: {
-        type: Number,
-        required: false
-    },
-    */
+      required: false
   },
-
-  computed: {
-    /*
-    trueBackgroundHeight(){
-        return (
-            this.backgroundHeight ? this.backgroundHeight :
-                this.backgroundWidth ? (
-                    this.backgroundWidth * (
-                        this.trueRatio > 0 ? this.trueRatio : 1
-                    )
-                ) : null);
-    },
-    trueBackgroundWidth(){
-        return (
-            this.backgroundWidth ? this.backgroundWidth :
-                this.backgroundHeight ? (
-                    this.backgroundHeight * (
-                        this.trueRatio > 0 ? this.trueRatio : 1
-                    )
-                ) : null);
-    },
-    */
-    trueRatio(): number {
-      if (!this.ratio) {
-        return 1;
-      }
-      const ratio = this.ratio.split("/");
-      return parseFloat(
-        (parseFloat(ratio[1]) / parseFloat(ratio[0])).toFixed(2)
-      );
-    },
+  backgroundWidth: {
+      type: Number,
+      required: false
   },
+  */
+});
+/*
+const trueBackgroundHeight = computed(() => {
+  return (
+    props.backgroundHeight ? props.backgroundHeight :
+      props.backgroundWidth ? (
+        props.backgroundWidth * (
+          trueRatio.value > 0 ? trueRatio.value : 1
+        )
+      ) : null);
+});
+const trueBackgroundWidth = computed(() => {
+  return (
+    props.backgroundWidth ? props.backgroundWidth :
+      props.backgroundHeight ? (
+        props.backgroundHeight * (
+          trueRatio.value > 0 ? trueRatio.value : 1
+        )
+      ) : null);
+});
+*/
+
+/**
+ * ratio translation
+ * TODO : / - .
+ */
+const trueRatio = computed(() => {
+  if (!props.ratio) {
+    return 1;
+  }
+  const ratio = props.ratio.split("/");
+  return parseFloat((parseFloat(ratio[1]) / parseFloat(ratio[0])).toFixed(2));
+});
+
+/**
+ * Styles or CSS variables needed
+ */
+const styleHelper = computed(() => {
+  // all styles
+  const styles: Record<string, string | number> = {
+    "--hero-panel-aspect-ratio": trueRatio.value * 100 + "%",
+  };
+
+  // height
+  if (props.height || props.hero)
+    styles[props.strict ? "height" : "min-height"] = props.height
+      ? props.height
+      : props.hero
+      ? "100vh"
+      : "auto";
+
+  // shadow
+  if (props.shadow) {
+    styles["--hero-panel-shadow-color"] = props.shadow;
+    styles["--hero-panel-shadow-opacity"] = props.shadowOpacity;
+  }
+
+  // background types
+  if (props.background)
+    switch (props.backgroundType?.toLowerCase()) {
+      case "css":
+        styles["background-image"] = "url('" + props.background + "')";
+        if (props.backgroundEffect === "fixed")
+          styles["background-attachment"] = "fixed";
+        // TODO parallax
+        break;
+      case "color":
+        styles["--hero-panel-background-color"] = props.background;
+        break;
+    }
+  return styles;
 });
 </script>
 
@@ -196,6 +299,7 @@ $hero-panel-mobile-threshold: 600px !default;
 .hero-panel {
   position: relative;
   z-index: 1;
+  display: flex;
 
   background: var(--hero-panel-background-color);
   background-repeat: no-repeat;
@@ -207,9 +311,11 @@ $hero-panel-mobile-threshold: 600px !default;
     position: relative;
     z-index: 1;
     width: 100%;
+    height: 100%;
     & > * {
       width: 100%;
       margin: 0 auto;
+      background-color: blue;
     }
   }
 
@@ -249,8 +355,6 @@ $hero-panel-mobile-threshold: 600px !default;
     z-index: 0;
   }
 
-  // MODES
-
   &.shadow-active {
     .panel-shadow {
       display: block;
@@ -259,26 +363,22 @@ $hero-panel-mobile-threshold: 600px !default;
     }
   }
 
-  &.centered-mode,
-  &.centered-top-mode,
-  &.centered-bottom-mode {
-    display: flex;
+  // centered
+  &.centered-mode {
     align-items: center;
+    justify-content: center;
     .panel-content {
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
     }
   }
-  &.centered-top-mode {
-    align-items: flex-start;
-    .panel-content {
-      align-items: flex-start;
-    }
-  }
-  &.centered-bottom-mode {
+
+  // bottom
+  &.bottom-mode {
     align-items: flex-end;
     .panel-content {
+      display: flex;
       align-items: flex-end;
     }
   }

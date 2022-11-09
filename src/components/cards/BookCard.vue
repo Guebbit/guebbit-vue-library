@@ -46,98 +46,97 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { defineProps, computed } from "vue";
 
-export default defineComponent({
-  name: "BookCard",
-
-  props: {
-    title: {
-      type: String,
-      required: false,
-    },
-    author: {
-      type: String,
-      required: false,
-    },
-    color: {
-      type: String,
-      default: () => {
-        return "#FFFFFF";
-      },
-    },
-    rotation: {
-      type: Number,
-      default: () => {
-        return 3; // max 7.5
-      },
-    },
-    hover: {
-      type: Boolean,
-      default: () => {
-        return true;
-      },
-    },
-
-    height: {
-      type: Number,
-      required: false,
-    },
-    width: {
-      type: Number,
-      required: false,
-    },
-    ratio: {
-      type: String,
-      required: false,
-    },
-
-    image: {
-      type: String,
-      required: false,
-    },
-    spine: {
-      type: String,
-      required: false,
-    },
-    spineHeight: {
-      type: String,
-      default: () => {
-        return "50px";
-      },
-    },
-    logo: {
-      type: String,
-      required: false,
+const props = defineProps({
+  title: {
+    type: String,
+    required: false,
+  },
+  author: {
+    type: String,
+    required: false,
+  },
+  color: {
+    type: String,
+    default: () => "#FFFFFF",
+  },
+  rotation: {
+    type: Number,
+    default: () => {
+      return 3; // max 7.5
     },
   },
-
-  computed: {
-    trueHeight() {
-      return this.height
-        ? this.height
-        : this.width
-        ? this.width * this.trueRatio
-        : null;
-    },
-    trueWidth() {
-      return this.width
-        ? this.width
-        : this.height
-        ? this.height * this.trueRatio
-        : null;
-    },
-    trueRatio(): number {
-      if (!this.ratio) {
-        return 1;
-      }
-      const ratio = this.ratio.split("/");
-      return parseFloat(
-        (parseFloat(ratio[1]) / parseFloat(ratio[0])).toFixed(2)
-      );
+  hover: {
+    type: Boolean,
+    default: () => {
+      return true;
     },
   },
+  height: {
+    type: Number,
+    required: false,
+  },
+  width: {
+    type: Number,
+    required: false,
+  },
+  ratio: {
+    type: String,
+    required: false,
+  },
+  image: {
+    type: String,
+    required: false,
+  },
+  spine: {
+    type: String,
+    required: false,
+  },
+  spineHeight: {
+    type: String,
+    default: () => {
+      return "50px";
+    },
+  },
+  logo: {
+    type: String,
+    required: false,
+  },
+});
+
+/**
+ *
+ */
+const trueRatio = computed(() => {
+  if (!props.ratio) {
+    return 1;
+  }
+  const ratio = props.ratio.split("/");
+  return parseFloat((parseFloat(ratio[1]) / parseFloat(ratio[0])).toFixed(2));
+});
+
+/**
+ *
+ */
+const trueHeight = computed(() => {
+  return props.height
+    ? props.height
+    : props.width
+    ? props.width * trueRatio.value
+    : null;
+});
+
+/**
+ *
+ */
+const trueWidth = computed(() => {
+  return props.width
+    ? props.width
+    : props.height
+    ? props.height * trueRatio.value
+    : null;
 });
 </script>
 

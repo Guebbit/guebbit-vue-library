@@ -246,89 +246,76 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { defineProps, ref, computed, onMounted } from "vue";
 
-export default defineComponent({
-  name: "MasterCard",
-
-  data: () => {
-    return {
-      isFlipped: false,
-    };
+const props = defineProps({
+  logo: {
+    type: String,
+    required: false,
   },
-
-  props: {
-    logo: {
-      type: String,
-      required: false,
-    },
-    name: {
-      type: String,
-      required: false,
-    },
-    // background-color
-    background: {
-      type: String,
-      required: false,
-    },
-    // text-color
-    color: {
-      type: String,
-      required: false,
-    },
-    // credit card
-    cardNumber: {
-      type: String,
-      required: false,
-    },
-    cardExpire: {
-      type: String,
-      required: false,
-    },
-    // only payments (ex: paypal)
-    cardEmail: {
-      type: String,
-      required: false,
-    },
-
-    //
-    clickToFlip: {
-      type: Boolean,
-      default: () => {
-        return false;
-      },
-    },
-    // show back of card
-    flipped: {
-      type: Boolean,
-      default: () => {
-        return false;
-      },
+  name: {
+    type: String,
+    required: false,
+  },
+  // background-color
+  background: {
+    type: String,
+    required: false,
+  },
+  // text-color
+  color: {
+    type: String,
+    required: false,
+  },
+  // credit card
+  cardNumber: {
+    type: String,
+    required: false,
+  },
+  cardExpire: {
+    type: String,
+    required: false,
+  },
+  // only payments (ex: paypal)
+  cardEmail: {
+    type: String,
+    required: false,
+  },
+  //
+  clickToFlip: {
+    type: Boolean,
+    default: () => {
+      return false;
     },
   },
-
-  computed: {
-    cardNumberTranslated() {
-      if (!this.cardNumber || this.cardNumber.length < 8) {
-        return "";
-      }
-      return this.cardNumber.match(/.{1,4}/g)!.join(" ");
+  // show back of card TODO modelValue
+  flipped: {
+    type: Boolean,
+    default: () => {
+      return false;
     },
   },
+});
 
-  methods: {
-    clickFlip() {
-      if (!this.clickToFlip) {
-        return;
-      }
-      this.isFlipped = !this.isFlipped;
-    },
-  },
+const isFlipped = ref(false);
 
-  created() {
-    this.isFlipped = this.flipped;
-  },
+const cardNumberTranslated = computed(() => {
+  if (!props.cardNumber || props.cardNumber.length < 8) {
+    return "";
+  }
+  return props.cardNumber.match(/.{1,4}/g)!.join(" ");
+});
+
+function clickFlip() {
+  if (!props.clickToFlip) {
+    return;
+  }
+  isFlipped.value = !isFlipped.value;
+}
+
+onMounted(() => {
+  isFlipped.value = props.flipped;
 });
 </script>
 
@@ -480,7 +467,6 @@ export default defineComponent({
       font-size: 37.769px;
     }
   }
-
   &.card-email-mode {
     .svg-label-identification {
       font-size: 32px;
@@ -492,6 +478,8 @@ export default defineComponent({
       display: none;
     }
   }
+
+  // ----- MODES -----
   &.flipped {
     .credit-card-true {
       transform: rotateY(180deg);

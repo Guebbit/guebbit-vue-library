@@ -20,57 +20,47 @@
   </Panel>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { defineProps } from "vue";
 // WARNING: dependence required
 import Panel from "./Panel.vue";
 
-export default defineComponent({
-  name: "ActionPanel",
-
-  components: {
-    Panel,
+defineProps({
+  // text
+  title: {
+    type: String,
+    required: false,
   },
-
-  props: {
-    // text
-    title: {
-      type: String,
-      required: false,
+  text: {
+    type: String,
+    required: false,
+  },
+  buttonText: {
+    type: String,
+    required: false,
+  },
+  // MIN height (because strict: false)
+  height: {
+    type: String,
+    required: false,
+  },
+  // MODES
+  column: {
+    type: Boolean,
+    default: () => {
+      return false;
     },
-    text: {
-      type: String,
-      required: false,
+  },
+  columnLeft: {
+    type: Boolean,
+    default: () => {
+      return false;
     },
-    buttonText: {
-      type: String,
-      required: false,
-    },
-
-    // MIN height (because strict: false)
-    height: {
-      type: String,
-      required: false,
-    },
-
-    // MODES
-    column: {
-      type: Boolean,
-      default: () => {
-        return false;
-      },
-    },
-    columnLeft: {
-      type: Boolean,
-      default: () => {
-        return false;
-      },
-    },
-    columnRight: {
-      type: Boolean,
-      default: () => {
-        return false;
-      },
+  },
+  columnRight: {
+    type: Boolean,
+    default: () => {
+      return false;
     },
   },
 });
@@ -89,7 +79,6 @@ $action-panel-mobile-threshold: 600px !default;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-
       @media (max-width: $action-panel-mobile-threshold) {
         justify-content: center;
       }

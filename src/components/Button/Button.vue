@@ -7,7 +7,7 @@
     :disabled="disabled"
     @click="onClick($event)"
   >
-    <span>{{ label }}YYYYC</span>
+    <span>{{ label }}</span>
   </button>
 </template>
 <script lang="ts">

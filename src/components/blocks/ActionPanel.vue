@@ -20,60 +20,51 @@
   </Panel>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { defineProps, computed } from "vue";
 // WARNING: dependence required
 import Panel from "./Panel.vue";
-// import Panel from "@/components/blocks/Panel.vue";
 
-export default defineComponent({
-  name: "ActionPanel",
-
-  components: {
-    Panel,
+defineProps({
+  // text
+  title: {
+    type: String,
+    required: false,
+  },
+  text: {
+    type: String,
+    required: false,
+  },
+  buttonText: {
+    type: String,
+    required: false,
   },
 
-  props: {
-    // text
-    title: {
-      type: String,
-      required: false,
-    },
-    text: {
-      type: String,
-      required: false,
-    },
-    buttonText: {
-      type: String,
-      required: false,
-    },
+  // MIN height (because strict: false)
+  height: {
+    type: String,
+    required: false,
+  },
 
-    // MIN height (because strict: false)
-    height: {
-      type: String,
-      required: false,
-    },
-
-    // MODES
-    column: {
-      type: Boolean,
-      default: () => {
-        return false;
-      },
-    },
-    columnLeft: {
-      type: Boolean,
-      default: () => {
-        return false;
-      },
-    },
-    columnRight: {
-      type: Boolean,
-      default: () => {
-        return false;
-      },
+  // MODES
+  column: {
+    type: Boolean,
+    default: () => {
+      return false;
     },
   },
+  columnLeft: {
+    type: Boolean,
+    default: () => {
+      return false;
+    },
+  },
+  columnRight: {
+    type: Boolean,
+    default: () => {
+      return false;
+    },
+  }
 });
 </script>
 

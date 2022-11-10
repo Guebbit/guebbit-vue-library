@@ -73,7 +73,7 @@ export default {
 .c-Checkbox {
   cursor: pointer;
   position: relative;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   width: -moz-fit-content;
   width: fit-content;

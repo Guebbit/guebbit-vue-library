@@ -19,7 +19,7 @@
   "unpkg": "./dist/moon.umd.js",
   "jsdelivr": "./dist/moon.umd.js",
   "scripts": {
-    "dev": "vitepress dev docs",
+    "dev": "vitepress dev docs --port 3000",
     "build": "vitepress build docs",
     "serve": "vitepress serve docs",
     "build:library": "vite build",
@@ -32,17 +32,18 @@
     "vue": "^3.2.41"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^1.2.5",
-    "@vue/compiler-sfc": "^3.1.5",
-    "eslint": "^7.31.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-vue": "^7.14.0",
-    "prettier": "^2.3.2",
-    "rollup-plugin-visualizer": "^5.5.2",
-    "sass": "^1.56.0",
+    "@vitejs/plugin-vue": "^3.2.0",
+    "@vue/compiler-sfc": "^3.2.44",
+    "@vue/eslint-config-typescript": "^11.0.2",
+    "eslint": "^8.22.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-vue": "^9.7.0",
+    "prettier": "^2.7.1",
+    "rollup-plugin-visualizer": "^5.8.3",
+    "sass": "^1.56.1",
     "typescript": "^4.8.4",
     "vite": "^3.2.2",
-    "vitepress": "^0.22.4"
+    "vitepress": "^1.0.0-alpha.28"
   },
   "dependencies": {
     "mitt": "^3.0.0",

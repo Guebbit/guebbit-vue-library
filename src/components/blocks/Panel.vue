@@ -1,10 +1,11 @@
 <template>
   <div
+    ref="panelRef"
     class="hero-panel"
     :class="{
       'shadow-active': shadow && shadow.length > 0,
+      'wallpaper-mode': wallpaper,
       'aspect-ratio-mode': ratio,
-      'content-full-height': full,
       'centered-mode': centered,
       'bottom-mode': bottom,
     }"
@@ -14,50 +15,16 @@
       <div class="panel-shadow"></div>
     </slot>
     <slot name="background">
-      <!-- TODO thumbnail & lazyload -->
-      <img
-        v-if="backgroundType === 'image'"
+      <Media
         class="panel-background"
-        :src="background"
-        :alt="backgroundAlt"
+        :media="background"
+        :type="backgroundType"
+        :thumbnail="backgroundThumbnail"
         :title="backgroundTitle"
+        :alt="backgroundAlt"
+        :height="backgroundType === 'iframe' ? (panelRef?.clientWidth + 'px') : undefined"
+        :width="backgroundType === 'iframe' ? (panelRef?.clientHeight + 'px') : undefined"
       />
-      <div
-        v-else-if="backgroundType === 'color'"
-        class="panel-background"
-        :style="{
-          'background-color': background
-        }"
-      />
-      <div
-        v-if="backgroundType === 'iframe'"
-        class="panel-background"
-      >
-        <div>
-          <iframe
-            :src="background"
-            frameborder="0"
-            allowfullscreen=""
-            autoplay=""
-            mute=""
-            loop=""
-          ></iframe>
-        </div>
-      </div>
-      <video
-        v-else
-        class="panel-background"
-        preload="metadata"
-        playsinline=""
-        muted=""
-        loop=""
-        autoplay=""
-      >
-        <source
-          :src="background"
-          :type="backgroundType"
-        >
-      </video>
     </slot>
     <div class="panel-content">
       <div>
@@ -68,13 +35,15 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, computed, type PropType } from "vue";
+import { defineProps, computed, ref, type PropType } from "vue";
+import Media from "../atoms/Media.vue";
 
 const props = defineProps({
 
   /**
    * Height of panel
    * Min-height default. Become "height" when strict = true
+   * Can be %, px, vh, etc...
    */
   height: {
     type: String,
@@ -98,11 +67,6 @@ const props = defineProps({
   backgroundType: {
     type: String as PropType<"image" | "iframe" | "color" | "css" | string>,
     default: () => "image",
-    /*
-    validator(type :string) {
-      return ["image", "video", "url", "color"].includes(type)
-    },
-    */
   },
 
   /**
@@ -112,17 +76,6 @@ const props = defineProps({
   backgroundThumbnail: {
     type: String,
     required: false,
-  },
-
-  /**
-   * To apply an effect on the image
-   * fixed: TODO (css only for now)
-   * parallax: TODO
-   */
-  backgroundEffect: {
-    type: String as PropType<"regular" | "fixed" | "parallax">,
-    default: () => "regular",
-    validator: (type :string) => ["regular", "fixed", "parallax"].includes(type)
   },
 
   /**
@@ -158,15 +111,6 @@ const props = defineProps({
   shadowOpacity: {
     type: Number,
     default: () => 0.4,
-  },
-
-  /**
-   * Background ratio (if needed)
-   * ex: 16:9, 16/9, 16-9 or 16.9
-   */
-  ratio: {
-    type: String,
-    required: false,
   },
 
   /**
@@ -207,44 +151,28 @@ const props = defineProps({
   },
 
   /**
-   * full height of content TODO???
+   * Size of panel will be based on panel-background
    */
-  full: {
+  wallpaper: {
     type: Boolean,
     default: () => false,
   },
 
-  /*
-  backgroundHeight: {
-      type: Number,
-      required: false
+  /**
+   * Background ratio (if needed)
+   * ex: 16:9, 16/9, 16-9 or 16.9
+   */
+  ratio: {
+    type: String,
+    required: false,
   },
-  backgroundWidth: {
-      type: Number,
-      required: false
-  },
-  */
 });
-/*
-const trueBackgroundHeight = computed(() => {
-  return (
-    props.backgroundHeight ? props.backgroundHeight :
-      props.backgroundWidth ? (
-        props.backgroundWidth * (
-          trueRatio.value > 0 ? trueRatio.value : 1
-        )
-      ) : null);
-});
-const trueBackgroundWidth = computed(() => {
-  return (
-    props.backgroundWidth ? props.backgroundWidth :
-      props.backgroundHeight ? (
-        props.backgroundHeight * (
-          trueRatio.value > 0 ? trueRatio.value : 1
-        )
-      ) : null);
-});
-*/
+
+/**
+ * Ref of Panel and Iframe
+ *  - to get width and height and use them on unruly iframes
+ */
+const panelRef = ref();
 
 /**
  * ratio translation
@@ -254,7 +182,8 @@ const trueRatio = computed(() =>  {
   if (!props.ratio) {
     return 1;
   }
-  const ratio = props.ratio.split("/");
+  // split for every possible delimeter
+  const ratio = props.ratio.split(':').join(',').split('/').join(',').split('-').join(',').split('.').join(',').split(',');
   return parseFloat(
     (parseFloat(ratio[1]) / parseFloat(ratio[0])).toFixed(2)
   );
@@ -270,8 +199,10 @@ const styleHelper = computed(() =>  {
   };
 
   // height
-  if(props.height || props.hero)
-    styles[props.strict ? 'height' : 'min-height'] = props.height ? props.height : (props.hero ? '100vh' : 'auto');
+  if(props.hero)
+    styles[props.strict ? "height" : "min-height"] = "100vh";
+  if(props.height)
+    styles[props.strict ? "height" : "min-height"] = props.height;
 
   // shadow
   if(props.shadow){
@@ -279,22 +210,8 @@ const styleHelper = computed(() =>  {
     styles['--hero-panel-shadow-opacity'] = props.shadowOpacity;
   }
 
-  // background types
-  if(props.background)
-    switch (props.backgroundType?.toLowerCase()){
-      case "css":
-        styles['background-image'] = "url('" + props.background + "')";
-        if(props.backgroundEffect === "fixed")
-          styles['background-attachment'] = "fixed";
-        // TODO parallax
-        break;
-      case "color":
-        styles['--hero-panel-background-color'] = props.background;
-        break;
-    }
   return styles;
 });
-
 </script>
 
 <style lang="scss">
@@ -306,12 +223,6 @@ $hero-panel-mobile-threshold: 600px !default;
   z-index: 1;
   display: flex;
 
-  background: var(--hero-panel-background-color);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-attachment: scroll;
-  background-size: cover;
-
   .panel-content {
     position: relative;
     z-index: 1;
@@ -320,7 +231,6 @@ $hero-panel-mobile-threshold: 600px !default;
     & > * {
       width: 100%;
       margin: 0 auto;
-      background-color: blue;
     }
   }
 
@@ -336,18 +246,10 @@ $hero-panel-mobile-threshold: 600px !default;
     object-fit: cover;
     -o-object-fit: cover;
 
-    // Iframe are very problematic (es: Youtube)
-    iframe {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 150vw;
-      height: 100vh;
-      transform: translate(-50%, -50%);
-      @media (min-width: $hero-panel-mobile-threshold) {
-        width: 100vw;
-      }
-    }
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: scroll;
+    background-size: cover;
   }
 
   .panel-shadow {
@@ -388,43 +290,25 @@ $hero-panel-mobile-threshold: 600px !default;
     }
   }
 
+  &.wallpaper-mode{
+    .panel-content{
+      position: absolute;
+      top: 0;
+    }
+    .panel-background{
+      position: relative;
+      top: 0;
+      left: 0;
+      transform: none;
+    }
+  }
+
   &.aspect-ratio-mode {
     overflow: hidden;
     .panel-background {
       object-fit: initial;
       height: 0;
       padding-bottom: var(--hero-panel-aspect-ratio);
-      iframe {
-        width: 100%;
-        height: 100%;
-      }
-    }
-  }
-
-  // IFRAME MODES (youtube mostly)
-  // never cut out content
-  &.contained-iframe {
-    iframe {
-      max-width: 100%;
-      max-height: 100%;
-    }
-  }
-  // the VIDEO in the iframe is horizontal, ex: 16:9
-  &.horizontal-iframe {
-    iframe {
-      width: 200vw; // because mobile width is very low
-      @media (min-width: $hero-panel-mobile-threshold) {
-        width: 100vw;
-        max-height: 100%;
-      }
-    }
-  }
-  // the VIDEO in the iframe is vertical
-  &.vertical-iframe {
-    iframe {
-      @media (min-width: $hero-panel-mobile-threshold) {
-        max-width: 120%;
-      }
     }
   }
 }

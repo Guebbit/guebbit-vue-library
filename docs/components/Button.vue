@@ -10,7 +10,7 @@
     <span>{{ label }}</span>
   </button>
 </template>
-<script lang="ts">
+<script>
 export default {
   name: 'Button',
   props: {
@@ -28,7 +28,7 @@ export default {
       type: String,
       required: false,
       default: 'default',
-      validator(type :string) {
+      validator(type) {
         return ['default', 'outlined', 'text'].includes(type)
       },
     },
@@ -40,21 +40,16 @@ export default {
   },
   emits: ['click'],
   computed: {
-    buttonClassObject() :any {
+    buttonClassObject() {
       return {
-        //@ts-ignore
         'is-default': this.type === 'default',
-        //@ts-ignore
         'is-outlined': this.type === 'outlined',
-        //@ts-ignore
         'is-text': this.type === 'text',
       }
     },
   },
   methods: {
-    //@ts-ignore
     onClick(event) {
-      //@ts-ignore
       this.$emit('click', event)
     },
   },
@@ -80,7 +75,7 @@ button {
     z-index: 1;
     opacity: 0;
     transition: opacity 0.15s ease-in-out;
-    background-color: red;
+    background-color: black;
   }
 }
 

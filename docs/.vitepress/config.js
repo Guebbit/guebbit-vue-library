@@ -4,7 +4,7 @@
  */
 module.exports = {
   lang: 'en-US',
-  title: '🌙 Moon',
+  title: 'Guebbit Vue Component Library',
   description: 'A lightweight Vue 3 component library',
 
   themeConfig: {
@@ -12,26 +12,22 @@ module.exports = {
     nav: [
       {
         text: 'Github',
-        link: 'https://github.com/ulissesferreira/moon',
+        link: 'https://github.com/Guebbit/guebbit-vue-library',
       },
     ],
     sidebar: [
       {
-        text: 'Introduction',
-        link: '/',
-      },
-      {
-        text: 'Components',
-        children: [
-          { text: 'Button', link: '/guide/button/button' },
-          { text: 'Checkbox', link: '/guide/checkbox/checkbox' },
-        ],
-      },
-      {
         text: 'Blocks',
-        children: [
-          { text: 'Panel', link: '/guide/blocks/panel/panel' },
+        items: [
+          {
+            text: 'Panels',
+            items: [
+              { text: 'Panel (basic)', link: '/guide/blocks/panel' },
+            ],
+          },
         ],
+        collapsible: true,
+        // collapsed: true,
       },
     ],
   },
